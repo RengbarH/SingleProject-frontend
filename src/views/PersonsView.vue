@@ -1,5 +1,5 @@
 <template>
-<h1>Welcome to Persons</h1>
+<h1>Welcome to Persons site</h1>
 </template>
 
 <script>
