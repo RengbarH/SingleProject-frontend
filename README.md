@@ -1,3 +1,5 @@
+[![CI](https://github.com/RengbarH/SingleProject-frontend/actions/workflows/ci.yml/badge.svg)](https://github.com/RengbarH/SingleProject-frontend/actions/workflows/ci.yml)
+
 # singleproject-frontend
 
 ## Project setup
