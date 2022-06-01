@@ -1,13 +1,14 @@
 <template>
-  <div class="row row-cols-1 row-cols-md-2 g-4">
+  <div class="row row-cols-1 row-cols-md-5 g-4">
     <div class="col" v-for="person in persons" :key="person.id">
-      <div class="card">
+      <div class="card h-100">
         <img :src="getAvatar(person)" class="card-img-top" :alt="person.firstName + ' ' + person.lastName">
         <div class="card-body">
-          <h5 class="card-title">{{ `${person.firstName} ${person.lastName}` }}</h5>
+          <h5 class="card-title">{{ person.firstName }} {{ person.lastName }}</h5>
           <p class="card-text">
-            {{ `${person.firstName} ${person.lastName}` }} ist {{ person.gender === 'MALE' ? 'männlich' : 'weiblich' }} und besitzt
-            {{ person.recipe.length }} Rezepte
+            {{ person.firstName }} {{ person.lastName }} ist {{ person.gender === 'MALE' ? 'männlich' : 'weiblich' }}
+            und besitzt
+            {{ person.recipes.length }} Rezepte.
           </p>
         </div>
       </div>
@@ -20,22 +21,7 @@ export default {
   name: 'PersonsView',
   data () {
     return {
-      persons: [
-        {
-          id: 1,
-          firstName: 'Max',
-          lastName: 'Mustermann',
-          gender: 'MALE',
-          recipe: []
-        },
-        {
-          id: 2,
-          firstName: 'Maia',
-          lastName: 'Hedwig',
-          gender: 'FEMALE',
-          recipe: []
-        }
-      ]
+      persons: []
     }
   },
   methods: {
@@ -46,6 +32,19 @@ export default {
         return require('../assets/woman.png')
       }
     }
+  },
+  mounted () {
+    const requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    }
+
+    fetch('http://localhost:8080/api/v1/persons', requestOptions)
+      .then(response => response.json())
+      .then(result => result.forEach(person => {
+        this.persons.push(person)
+      }))
+      .catch(error => console.log('error', error))
   }
 }
 </script>
