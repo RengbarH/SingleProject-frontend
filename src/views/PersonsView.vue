@@ -34,7 +34,7 @@ export default {
     }
   },
   mounted () {
-    const endpoint = process.env.VUE_APP_BACKEND_BASE_URL = '/api/v1/persons'
+    const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/persons'
     const requestOptions = {
       method: 'GET',
       redirect: 'follow'
