@@ -1,36 +1,23 @@
 <template>
-  <div class="row row-cols-1 row-cols-md-5 g-4">
-    <div class="col" v-for="person in persons" :key="person.id">
-      <div class="card h-100">
-        <img :src="getAvatar(person)" class="card-img-top" :alt="person.firstName + ' ' + person.lastName">
-        <div class="card-body">
-          <h5 class="card-title">{{ person.firstName }} {{ person.lastName }}</h5>
-          <p class="card-text">
-            {{ person.firstName }} {{ person.lastName }} ist {{ person.gender === 'MALE' ? 'männlich' : 'weiblich' }}
-            und besitzt
-            {{ person.recipes.length }} Rezepte.
-          </p>
-        </div>
-      </div>
-    </div>
+  <div class="container-fluid">
+    <persons-card-list :persons="this.persons"></persons-card-list>
   </div>
+  <persons-create-form></persons-create-form>
 </template>
 
 <script>
+import PersonsCardList from '@/components/PersonsCardList'
+import PersonsCreateForm from '@/components/PersonsCreateForm'
+
 export default {
   name: 'PersonsView',
+  components: {
+    PersonsCardList,
+    PersonsCreateForm
+  },
   data () {
     return {
       persons: []
-    }
-  },
-  methods: {
-    getAvatar (person) {
-      if (person.gender === 'MALE') {
-        return require('../assets/man.png')
-      } else if (person.gender === 'FEMALE') {
-        return require('../assets/woman.png')
-      }
     }
   },
   mounted () {
