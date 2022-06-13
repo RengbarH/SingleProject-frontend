@@ -10,14 +10,20 @@
               aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-      <form class="text-start">
+      <form class="text-start needs-validation" novalidate>
         <div class="mb-3">
           <label for="first-name" class="form-label">First name</label>
           <input type="text" class="form-control" id="first-name" v-model="firstName" required>
+          <div class="invalid-feedback">
+            Please choose a first name.
+          </div>
         </div>
         <div class="mb-3">
           <label for="last-name" class="form-label">Last name</label>
           <input type="text" class="form-control" id="last-name" v-model="lastName" required>
+          <div class="invalid-feedback">
+            Please choose a last name.
+          </div>
         </div>
         <div class="mb-3">
           <label for="gender" class="form-label">Gender</label>
@@ -27,6 +33,9 @@
             <option value="FEMALE">Female</option>
             <option value="DIVERSE">Diverse</option>
           </select>
+          <div class="invalid-feedback">
+            Please choose a gender.
+          </div>
         </div>
         <div class="mt-5">
           <button type="submit" class="btn btn-primary me-3" @click="createPerson">Create</button>
@@ -49,25 +58,48 @@ export default {
   },
   methods: {
     createPerson () {
-      const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/persons'
-      const myHeaders = new Headers()
-      myHeaders.append('Content-Type', 'application/json')
+      const valid = this.validate()
+      if (valid) {
+        const endpoint = process.env.VUE_APP_BACKEND_BASE_URL + '/api/v1/persons'
+        const myHeaders = new Headers()
+        myHeaders.append('Content-Type', 'application/json')
 
-      const raw = JSON.stringify({
-        firstName: this.firstName,
-        lastName: this.lastName,
-        gender: this.gender
-      })
+        const raw = JSON.stringify({
+          firstName: this.firstName,
+          lastName: this.lastName,
+          gender: this.gender
+        })
 
-      const requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
+        const requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow'
+        }
+
+        fetch(endpoint, requestOptions)
+          .catch(error => console.log('error', error))
       }
+    },
+    validate () {
+      let valid = true
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.querySelectorAll('.needs-validation')
 
-      fetch(endpoint, requestOptions)
-        .catch(error => console.log('error', error))
+      // Loop over them and prevent submission
+      Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+          form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+              valid = false
+              event.preventDefault()
+              event.stopPropagation()
+            }
+
+            form.classList.add('was-validated')
+          }, false)
+        })
+      return valid
     }
   }
 }
@@ -83,8 +115,8 @@ export default {
 }
 
 .btn-primary {
- /* background-color: #42b983;
-  border-color: #42b983;*/
+  /* background-color: #42b983;
+   border-color: #42b983;*/
   border-radius: 30px;
 }
 
